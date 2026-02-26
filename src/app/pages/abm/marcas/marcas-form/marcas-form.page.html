@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/marcas-listar">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nueva Marca </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]='form'>
+    <ion-card class="container">
+      <ion-item-divider>
+          <h5 *ngIf="!this.dataEditar">Nueva Marca</h5> <br/>
+          <h5 *ngIf="this.dataEditar">Datos de la marca: "{{this.dataEditar.nombre}}"</h5>
+      </ion-item-divider>
+    
+      <ion-grid>
+        <ion-row>
+            <ion-col size="12" size-lg="6">
+              <ion-list>
+                <ion-item>
+                  <ion-label position="floating">Nombre</ion-label>
+                  <ion-input formControlName="nombre"></ion-input>
+                  <div *ngFor="let error of errorMessages.nombre">
+                    <ng-container *ngIf="nombre.hasError(error.type) && (nombre.dirty || nombre.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Descripcion</ion-label>
+                  <ion-input formControlName="descripcion"></ion-input>
+                  <div *ngFor="let error of errorMessages.descripcion">
+                    <ng-container *ngIf="descripcion.hasError(error.type) && (descripcion.dirty || descripcion.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="full" shape="round" color="success" (click)="submit()">Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

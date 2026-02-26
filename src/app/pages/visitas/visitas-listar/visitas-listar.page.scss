@@ -1,0 +1,34 @@
+ion-card{
+    margin-bottom: 0px!important;
+}
+
+.item-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  
+  .cliente-nombre {
+    font-weight: bold;
+    padding-bottom: 5px;
+    word-break: break-word;
+    white-space: normal;
+  }
+  
+  .visita-info {
+    padding-top: 5px;
+    word-break: break-word;
+    white-space: normal;
+  }
+  
+.estado-verde {
+  color: var(--ion-color-success);
+  font-weight: bold;
+}
+  
+.estado-amarillo {
+  color: #FFD600;
+  font-weight: bold;
+}
+  

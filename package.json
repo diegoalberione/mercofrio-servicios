@@ -1,0 +1,53 @@
+{
+  "name": "mercofrio",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "ionic build && ionic cap copy && ionic cap sync && ionic cap open android"
+  },
+  "dependencies": {
+    "@angular/animations": "11.2.14",
+    "@angular/common": "~11.2.0",
+    "@angular/compiler": "~11.2.0",
+    "@angular/core": "~11.2.0",
+    "@angular/forms": "~11.2.0",
+    "@angular/platform-browser": "~11.2.0",
+    "@angular/platform-browser-dynamic": "~11.2.0",
+    "@angular/router": "~11.2.0",
+    "@angular/service-worker": "^11.2.14",
+    "@capacitor/android": "^3.0.1",
+    "@capacitor/browser": "^1.0.1",
+    "@capacitor/camera": "^1.0.1",
+    "@capacitor/core": "^3.0.1",
+    "@capacitor/filesystem": "^1.0.1",
+    "@capacitor/network": "^1.0.1",
+    "@ionic-native/core": "^5.32.1",
+    "@ionic-native/photo-viewer": "^5.32.1",
+    "@ionic/angular": "^5.5.2",
+    "@robingenz/capacitor-file-picker": "^0.3.0",
+    "angular2-signaturepad": "^3.0.4",
+    "fuse.js": "^6.4.6",
+    "ionic-selectable": "^4.9.0",
+    "moment": "^2.29.1",
+    "ng2-file-upload": "^1.4.0",
+    "rxjs": "~6.6.0",
+    "ts-md5": "^1.2.7",
+    "tslib": "^2.1.0",
+    "zone.js": "~0.10.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.1101.4",
+    "@angular/cli": "~11.1.4",
+    "@angular/compiler-cli": "~11.2.0",
+    "@angular/language-service": "~11.2.0",
+    "@angular/localize": "^11.0.0",
+    "@capacitor/cli": "^3.0.1",
+    "@ionic/angular-toolkit": "^3.1.0",
+    "karma": "~5.2.0",
+    "ng-packagr": "^11.0.0",
+    "postcss": "^8.4.31",
+    "postcss-loader": "^4.3.0",
+    "protractor": "~7.0.0",
+    "tslint": "~6.1.0",
+    "typescript": "~4.0.2"
+  }
+}

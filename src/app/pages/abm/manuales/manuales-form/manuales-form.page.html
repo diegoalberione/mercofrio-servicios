@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/abm/manuales-listar">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Manuales</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card class="container">
+      <ion-item-divider>
+          <h5 *ngIf="!this.dataEditar">Nuevo manual</h5> <br/>
+          <h5 *ngIf="this.dataEditar">Datos del manual: "{{this.dataEditar.nombre}}"</h5>
+      </ion-item-divider>
+
+      <ion-grid>
+        <ion-row>
+            <ion-col size="12" size-lg="6">
+              <ion-list>
+                <form [formGroup]='manualForm'>
+                <ion-item>
+                  <ion-label position="floating">Nombre</ion-label>
+                  <ion-input formControlName="nombre"></ion-input>
+                  <div *ngFor="let error of errorMessages.nombre">
+                    <ng-container *ngIf="nombre.hasError(error.type) && (nombre.dirty || nombre.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Descripcion</ion-label>
+                  <ion-input formControlName="descripcion"></ion-input>
+                  <div *ngFor="let error of errorMessages.descripcion">
+                    <ng-container *ngIf="descripcion.hasError(error.type) && (descripcion.dirty || descripcion.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+              </form>
+                <ion-item>
+                  <ion-label>Seleccionar PDF</ion-label>
+                  <ion-button (click)="previewFile()" expand="block" fill="clear" shape="round" color="primary">
+                    <ion-icon name="document-outline" slot="start"></ion-icon>
+                    {{ dataEditar ? 'Cambiar PDF (opcional)' : 'Seleccionar PDF' }}
+                  </ion-button>
+                </ion-item>
+                
+                <!-- Mostrar archivo seleccionado -->
+                <ion-item *ngIf="pdf && pdf.files && pdf.files.length > 0">
+                  <ion-label>
+                    <h3>Archivo seleccionado:</h3>
+                    <p>{{pdf.files[0].name}}</p>
+                  </ion-label>
+                  <ion-icon name="checkmark-circle" color="success" slot="end"></ion-icon>
+                </ion-item>
+                
+                <!-- Mostrar archivo actual en edición -->
+                <ion-item *ngIf="dataEditar && !pdf">
+                  <ion-label>
+                    <h3>Archivo actual:</h3>
+                    <p>{{dataEditar.nombre}}.pdf</p>
+                  </ion-label>
+                  <ion-icon name="document" color="medium" slot="end"></ion-icon>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="full" shape="round" color="success" (click)="submit()">
+            {{ dataEditar ? 'Actualizar' : 'Guardar' }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-content>

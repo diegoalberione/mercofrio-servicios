@@ -1,0 +1,7 @@
+{
+  "name": "MercoFRIO",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

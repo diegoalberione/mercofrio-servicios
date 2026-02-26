@@ -1,0 +1,54 @@
+<!-- VISTA PC -->
+<ion-grid class="ion-hide-lg-down grilla {{classGrid}}" [ngClass]="{'odd': 0 === index % 2}">
+  <ion-row class="ion-align-items-center"> 
+    <ion-col *ngFor="let col of cols" class="{{col.class}}">
+      <span *ngIf="col.text" [innerHTML]="col.text"></span>
+      <img *ngIf="!col.text" [src]="col.url" class="tipo-img-pc" style="height: 65px;" />
+      <div *ngIf="col.color" class="tipo-color-pc" [ngStyle]="{'background-color': col.color}"></div>
+    </ion-col>
+    <ion-col class="ion-text-right"  *ngIf="countBtn > 0">
+      <ion-button *ngIf="banEditBtn" size="small" (click)="editItem()">
+        <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngFor="let btn of btns; index as i" size="small" [hidden]="btn.hidden" color="{{btn.color}}" (click)="customAction(i)">
+        <ion-icon slot="icon-only" name="{{btn.icon}}"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="banDeleteBtn" color="danger" size="small" (click)="deleteItem()">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="banResertPassBtn" color="primary" size="small" (click)="resetPass()">
+        <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+      </ion-button>
+    </ion-col>                  
+  </ion-row>
+</ion-grid>
+
+<!-- VISTA MOBILE -->
+<ion-item-sliding class="ion-hide-lg-up">
+  <ion-item  lines="none" [ngClass]="{'odd': 0 === index % 2}" class="ion-no-padding">  
+    <div *ngFor="let col of cols">
+      <ion-thumbnail *ngIf="col.url" slot="start">
+        <img [src]="col.url" class="tipo-img-mobile" />
+      </ion-thumbnail>      
+    </div>  
+    <div class="list-mobile">
+      <div *ngFor="let col of cols">
+        <p *ngIf="col.text" class="{{col.class}}" [innerHTML]="col.text"></p>       
+        <div *ngIf="col.color" class="tipo-color-mobile" [ngStyle]="{'background-color': col.color}"></div>
+      </div>
+    </div>
+  </ion-item>
+
+  <!-- OPCIONES PARA MOBILE -->
+  <ion-item-options side="end" *ngIf="countBtn > 0">
+    <ion-item-option *ngIf="banEditBtn" (click)="editItem()">
+      <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+    </ion-item-option>
+    <ion-item-option *ngFor="let btn of btns; index as i" color="{{btn.color}}" (click)="customAction(i)">
+      <ion-icon slot="icon-only" name="{{btn.icon}}"></ion-icon>
+    </ion-item-option>
+    <ion-item-option *ngIf="banDeleteBtn" color="danger" (click)="deleteItem()">
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

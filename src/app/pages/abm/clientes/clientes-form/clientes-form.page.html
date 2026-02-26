@@ -1,0 +1,114 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button
+      slot="start"
+      class="ion-no-padding"
+      routerLink="/clientes-listar"
+    >
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nuevo cliente </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="clienteForm">
+    <ion-card class="container">
+      <ion-item-divider>
+        <h5 *ngIf="!this.dataEditar">Nuevo cliente</h5>
+        <br />
+        <h5 *ngIf="this.dataEditar">
+          Datos del cliente: "{{this.dataEditar.nombres}}"
+        </h5>
+      </ion-item-divider>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-lg="6">
+            <ion-list>
+              <ion-item>
+                <ion-label position="floating">nombres</ion-label>
+                <ion-input formControlName="nombres"></ion-input>
+                <div *ngFor="let error of errorMessages.nombres">
+                  <ng-container
+                    *ngIf="nombres.hasError(error.type) && (nombres.dirty || nombres.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Apellido</ion-label>
+                <ion-input formControlName="apellido"></ion-input>
+                <div *ngFor="let error of errorMessages.apellido">
+                  <ng-container
+                    *ngIf="apellido.hasError(error.type) && (apellido.dirty || apellido.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Cuit</ion-label>
+                <ion-input formControlName="cuit"></ion-input>
+                <div *ngFor="let error of errorMessages.cuit">
+                  <ng-container
+                    *ngIf="cuit.hasError(error.type) && (cuit.dirty || cuit.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input formControlName="email"></ion-input>
+                <div *ngFor="let error of errorMessages.email">
+                  <ng-container
+                    *ngIf="email.hasError(error.type) && (email.dirty || email.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Direccion</ion-label>
+                <ion-input formControlName="direccion"></ion-input>
+                <div *ngFor="let error of errorMessages.direccion">
+                  <ng-container
+                    *ngIf="direccion.hasError(error.type) && (direccion.dirty || direccion.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Localidad</ion-label>
+                <ion-input formControlName="localidad"></ion-input>
+                <div *ngFor="let error of errorMessages.localidad">
+                  <ng-container
+                    *ngIf="localidad.hasError(error.type) && (localidad.dirty || localidad.touched)"
+                  >
+                    <small class="error-message">{{error.message}}</small>
+                  </ng-container>
+                </div>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button
+            expand="full"
+            shape="round"
+            color="success"
+            (click)="submit()"
+            >Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

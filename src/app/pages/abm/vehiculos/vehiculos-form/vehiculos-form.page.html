@@ -1,0 +1,72 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/vehiculos-listar">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nuevo vehiculo </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]='vehiculoForm'>
+    <ion-card class="container">
+      <ion-item-divider>
+          <h5 *ngIf="!this.dataEditar">Nuevo vehiculo</h5> <br/>
+          <h5 *ngIf="this.dataEditar">Datos del vehiculo: "{{this.dataEditar.nombre}}"</h5>
+      </ion-item-divider>
+    
+      <ion-grid>
+        <ion-row>
+            <ion-col size="12" size-lg="6">
+              <ion-list>
+                <ion-item>
+                  <ion-label position="floating">Nombre</ion-label>
+                  <ion-input formControlName="nombre"></ion-input>
+                  <div *ngFor="let error of errorMessages.nombre">
+                    <ng-container *ngIf="nombre.hasError(error.type) && (nombre.dirty || nombre.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Marca</ion-label>
+                  <ion-input formControlName="marca"></ion-input>
+                  <div *ngFor="let error of errorMessages.marca">
+                    <ng-container *ngIf="marca.hasError(error.type) && (marca.dirty || marca.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Modelo</ion-label>
+                  <ion-input formControlName="modelo"></ion-input>
+                  <div *ngFor="let error of errorMessages.modelo">
+                    <ng-container *ngIf="modelo.hasError(error.type) && (modelo.dirty || modelo.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Patente</ion-label>
+                  <ion-input formControlName="patente"></ion-input>
+                  <div *ngFor="let error of errorMessages.patente">
+                    <ng-container *ngIf="patente.hasError(error.type) && (patente.dirty || patente.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="full" shape="round" color="success" (click)="submit()">Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

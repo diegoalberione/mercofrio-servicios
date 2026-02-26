@@ -1,0 +1,319 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" (click)="anteriorPaso()">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nuevo servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="container">
+    <ion-row *ngIf="index==0">
+      <ion-col size="12">
+        <h4 class="ion-text-center titulo ion-margin-top">
+          <ion-label>Seleccione el tipo de servicio</ion-label>
+        </h4>
+      </ion-col>
+      <ion-col size="12" *ngFor="let item of tiposServicios; let i = index">
+        <ion-button expand="full" shape="round" (click)="seleccionTipoServicio(item)"> {{item.nombre}} </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="index==1">
+      <ion-col size="12">
+        <h4 class="ion-text-center titulo">
+          <ion-label> {{tipoServicio.nombre}} </ion-label>
+        </h4>
+        <ion-card>
+          <ion-list>
+            <ion-item button="true" *ngIf="camposHabilitados.marca">
+              <ion-label>Marca *</ion-label>
+              <ionic-selectable 
+              headerColor="primary"
+              [isMultiple]="false"
+              [items]="marcasDisponibles" 
+              itemValueField="id" 
+              itemTextField="nombre" 
+              [canSearch]="true"
+              closeButtonText="Cancelar"
+              confirmButtonText="Seleccionar"
+              [(ngModel)]="marcasSeleccionado"
+              (onSelect)="filtrarLineas($event)"
+              searchPlaceholder="Buscar marca" 
+              placeholder="Seleccione marca">
+              <ng-template ionicSelectableSearchFailTemplate>
+                <div padding>
+                  No encontrado.
+                </div>
+              </ng-template>
+            </ionic-selectable>
+            </ion-item>
+            
+            <ion-item *ngIf="camposHabilitados.modelo">
+              <ion-label position="floating">Modelo *</ion-label>
+              <ion-input
+                [(ngModel)]="servicio.modelo_nombre"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item *ngIf="camposHabilitados.equipo">
+              <ion-label position="floating">Equipo</ion-label>
+              <ion-select value="brown" okText="Aceptar" cancelText="Cancelar">
+                <ion-select-option value="1">Condensador a placas </ion-select-option>
+                <ion-select-option value="2">Condensador casco y tubos</ion-select-option>
+                <ion-select-option value="3">Condensador evaporativo</ion-select-option>
+                <ion-select-option value="4">Separador de liquido</ion-select-option>
+                <ion-select-option value="5">Recibidor de liquido</ion-select-option>
+                <ion-select-option value="6">Intercambiador de calor a placas</ion-select-option>
+                <ion-select-option value="7">Evaporador</ion-select-option>
+                <ion-select-option value="8">Economizador</ion-select-option>
+                <ion-select-option value="9">Flash Cooler</ion-select-option>
+                <ion-select-option value="10">Banco de agua helada</ion-select-option>
+                <ion-select-option value="11">Otros</ion-select-option>
+                <ion-select-option value="12">Votator</ion-select-option>
+                <ion-select-option value="13">Motor eléctrico</ion-select-option>
+                <ion-select-option value="14">Reductor</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item *ngIf="camposHabilitados.numero">
+              <ion-label position="floating">Número de serie</ion-label>
+              <ion-input
+                placeholder="Ingrese el id del modelo"
+                [(ngModel)]="servicio.equipo_nro"
+              ></ion-input>
+            </ion-item>
+            <ion-item *ngIf="camposHabilitados.mk">
+              <ion-label position="floating">MK</ion-label>
+              <ion-input
+                placeholder="Ingrese el número de servicio"
+                [(ngModel)]="servicio.servicio_nro"
+              ></ion-input>
+            </ion-item>
+            <ion-item *ngIf="camposHabilitados.horas">
+              <ion-label position="floating">Horas de marcha</ion-label>
+              <ion-input
+                placeholder="Ingrese las horas de marcha"
+                [(ngModel)]="servicio.horas_marcha"
+              ></ion-input>
+            </ion-item>
+            <ion-item *ngIf="camposHabilitados.titulo">
+              <ion-label position="floating">Titulo del servicio</ion-label>
+              <ion-input
+                [(ngModel)]="servicio.titulo"
+              ></ion-input>
+            </ion-item>
+            <ion-item detail="true" button="true" (click)="modalRepuesto()" *ngIf="camposHabilitados.repuestos">
+              <ion-label>Repuestos</ion-label>
+            </ion-item>
+            <ion-item detail="true" button="true" (click)="modalTrabajos()" *ngIf="camposHabilitados.trabajos">
+              <ion-label>Trabajos *</ion-label>
+            </ion-item>
+            <ion-item *ngIf="camposHabilitados.descripcion">
+              <ion-label position="floating">Recomendaciones</ion-label>
+              <ion-textarea 
+                autoGrow="true" 
+                rows="4"
+                [(ngModel)]="servicio.descripcion"
+                placeholder="Ingrese las recomendaciones"
+                style="min-height: 100px;"
+              ></ion-textarea>
+            </ion-item>
+            <ion-item detail="true" button="true" (click)="tomarFoto('pre')" *ngIf="camposHabilitados.fotospre">
+              <ion-label>Fotos antes del servicio</ion-label>
+              <ion-note slot="end" *ngIf="fotospre.length > 0">{{fotospre.length}} foto(s)</ion-note>
+              <ion-note slot="end" *ngIf="fotospre.length === 0">Agregar fotos</ion-note>
+            </ion-item>
+            <ion-item detail="true" button="true" (click)="tomarFoto('post')" *ngIf="camposHabilitados.fotospre">
+              <ion-label>Fotos después del servicio</ion-label>
+              <ion-note slot="end" *ngIf="fotospost.length > 0">{{fotospost.length}} foto(s)</ion-note>
+              <ion-note slot="end" *ngIf="fotospost.length === 0">Agregar fotos</ion-note>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Orden de venta</ion-label>
+              <ion-input placeholder="Ingrese el numero de la orden de venta" [(ngModel)]="servicio.orden_venta"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Nro remito</ion-label>
+              <ion-input placeholder="Ingrese el numero de remito" [(ngModel)]="servicio.nro_remito"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Garantía</ion-label>
+              <ion-checkbox [(ngModel)]="servicio.en_garantia"></ion-checkbox>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+
+        <ion-grid fixed class="ion-padding" *ngIf="fotospre.length > 0 || fotospost.length > 0">
+          <ion-row *ngIf="fotospre.length > 0">
+            <ion-col size="12">
+              <h4 class="ion-no-padding ion-no-margin">
+                <ion-label>Fotos antes del servicio ({{fotospre.length}})</ion-label>
+              </h4>
+            </ion-col>
+            <ion-col size="4" *ngFor="let item of fotospre; let i = index">
+              <ion-button
+                expand="block"
+                color="light"
+                shape="round"
+                size="small"
+                class="remove_imagen"
+                (click)="removeImagen('pre', i, item)"
+              >
+                <ion-icon name="trash" color="danger"></ion-icon>
+              </ion-button>
+              <img [src]="getSrc(item)" class="imagen" (click)="abrirImagen(item)"/>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="fotospost.length > 0">
+            <ion-col size="12">
+              <h4 class="ion-no-padding ion-no-margin">
+                <ion-label>Fotos después del servicio ({{fotospost.length}})</ion-label>
+              </h4>
+            </ion-col>
+            <ion-col size="4" *ngFor="let item of fotospost; let i = index">
+              <ion-button
+                expand="block"
+                color="light"
+                shape="round"
+                size="small"
+                class="remove_imagen"
+                (click)="removeImagen('post', i, item)"
+              >
+                <ion-icon name="trash" color="danger"></ion-icon>
+              </ion-button>
+              <img [src]="getSrc(item)" class="imagen" (click)="abrirImagen(item)"/>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- <ion-card *ngIf="camposHabilitados.automatismo === true" class="ion-margin-top">
+          <ion-list class="ion-text-center">
+            <ion-label>Tablero de comando</ion-label>
+            <ion-item>
+              <ion-label>Tablero en buen estado</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test" ></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>Componentes en buen estado</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>PT100 con cables hacia abajo</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>Transductores en buen estado</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>Solenoides en buen estado</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>Solenoides en buen estado</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-list class="ion-text-center">
+            <ion-label>Tablero de potencia</ion-label>
+            <ion-item>
+              <ion-label>¿Tablero en buen estado?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test" ></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Cableado correcto entre tableros?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Parada de emergencia funcionando?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Buena conexión de puesta a tierra?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Cabledas protecciones del motor PT10?0</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Cabledas las resistencias calefactoras?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-list class="ion-text-center">
+            <ion-label >Datos nominales del motor instalado</ion-label>
+          </ion-list>
+          <ion-list class="ion-text-center">
+            <ion-label>Energización</ion-label>
+            <ion-item>
+              <ion-label>¿La tensión p/Tab. Potencia es adecuada?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test" ></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿La tensión p/Tab. Comando es adecuada?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Los programas de PLC y Panel estan cargados?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Verificado sentido de giro de compresor/bomba?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-list class="ion-text-center">
+            <ion-label>Puesta en marcha (Controles previos)</ion-label>
+            <ion-item>
+              <ion-label>¿Alineación en obra?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test" ></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Se realizo carga de aceite?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Se realizó control de filtros?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+          </ion-list>
+          <ion-list class="ion-text-center">
+            <ion-label>Puesta en marcha (Controles en marcha)</ion-label>
+            <ion-item>
+              <ion-label>¿Se realizó calibración de VI?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test" ></ion-toggle>
+              <ion-input placeholder="Indique valor y vueltas" [(ngModel)]="automatizacion.test"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Se realizó calibración de LPI?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Se realizó calibración del consumo eléctrico?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+            <ion-item>
+              <ion-label>¿Se verificaron las seguridades (alarmas)?</ion-label>
+              <ion-toggle [(ngModel)]="automatizacion.test"></ion-toggle>
+            </ion-item>
+          </ion-list>
+        </ion-card> -->
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <ion-button
+                expand="full"
+                shape="round"
+                (click)="servicioCheck()"
+                color="success"
+                >guardar
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

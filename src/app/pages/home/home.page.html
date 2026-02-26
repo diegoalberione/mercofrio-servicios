@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <img class="logo" src="assets/imgs/logo.png" />
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="container">
+    <ion-row class="ion-align-items-center ion-justify-content-center" >
+      <ion-col size="12">
+        <ion-card>
+          <img src="assets/hello.svg" height="30px" class="hello" (click)="logOut()">
+          <h3><ion-label>Hola, {{usuarioLogeado.nombres}}!</ion-label></h3>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/visitas">Visitas</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/alertas">Alertas</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+         <ion-button expand="full" shape="round" routerLink="/visitas-listar">Consultar visitas</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/consulta-tecnica">Consulta técnica</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" (click)="syncBasico()">Sincronizar datos</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="usuarioLogeado.usuariosgrupo_id === 1">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/abm">ABM</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-text class="version-text" (click)="forzarActualizacion()" style="cursor: pointer;">v{{version.number}} ({{version.build}})</ion-text>
+</ion-footer>

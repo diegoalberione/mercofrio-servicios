@@ -1,0 +1,20 @@
+export interface IVisita {
+  id?: number;
+  fecha?: string,
+  nro_visita?: string,
+  responsable_usuario_id?: number,
+  cliente?: object,
+  cliente_usuario_id?: number,
+  vehiculo?: object,
+  vehiculo_id?: string,
+  tecnico?: object,
+  tecnico_usuario_id?: number,
+  horas_viaje?: string,
+  localidad?: string,
+  km_recorridos?: string,
+  horas_trabajadas?: string,
+  servicios?: any[],
+  estado_id?: number,
+  firma_multimedia?: string,
+  firma_aclaracion?: string,
+}

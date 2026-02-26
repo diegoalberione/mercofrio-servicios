@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/home">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Administración </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="container">
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/vehiculos-listar">Vehiculos</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/clientes-listar">Clientes</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/abm/usuarios-listar">Usuarios</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/abm/manuales-listar">Manuales</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/marcas-listar">Marcas</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="false">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/lineas-listar">Lineas</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center ion-justify-content-center" *ngIf="false">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/modelos-listar">Modelos</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="false" class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="10">
+        <ion-button expand="full" shape="round" routerLink="/equipos-form">Tipos de Equipos</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

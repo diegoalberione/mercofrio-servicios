@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/abm">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Marcas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" pullFactor="0.5" pullMin="100" pullMax="200" (ionRefresh)="getItems($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="ion-text-center">
+    <h4>Listado de marcas</h4>
+    <ion-label *ngIf='this.total > 0' class="resultados">
+      Resultados:
+      <ion-chip color="primary" mode="ios" outline="true">
+        <ion-label><b>{{total}}</b></ion-label>
+      </ion-chip>
+    </ion-label>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item style="border-radius: 25px;">
+          <ion-label>Buscar</ion-label>
+          <ion-input [(ngModel)]="filtroNombre" (ionChange)="filtrar($event)"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-card>
+    <ion-list class="listado" lines="none">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <p class="ion-text-center">
+              <span *ngIf="this.total == 0">Este listado está vacío :(</span>
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- SOLO PC -->
+      <ion-grid class="ion-hide-lg-down cabecera-grilla">
+        <ion-row>
+          <ion-col class="ion-text-negrita">
+            Nombre
+          </ion-col>
+          <ion-col class="ion-text-negrita">
+            Descripcion
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- COMPONENTE LIST RESPONSIVE -->
+      <list-responsive-simple *ngFor="let item of marcas; index as i" [cols]="armarColumnas(item)" [index]="i"
+        (deleteClick)="deleteItem(item.id)" (editClick)="editItem(item)">
+      </list-responsive-simple>
+    </ion-list>
+
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="getItems($event)">
+      <!--
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando mas información...">
+      </ion-infinite-scroll-content>
+      -->
+    </ion-infinite-scroll>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="nuevoItem()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,119 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button
+      slot="start"
+      class="ion-no-padding"
+      routerLink="/alertas"
+    >
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Alerta </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <ion-row class="ion-align-items-center ion-justify-content-center">
+    <ion-col size="12">
+      <ion-card>
+        <ion-list>
+          <ion-item detail="true" button="true">
+            <ion-label>Cliente</ion-label>
+            <ionic-selectable
+            headerColor="primary"
+            [isMultiple]="false"
+            [items]="clientesDisponibles"
+            itemValueField="id"
+            itemTextField="nombres"
+            [canSearch]="true"
+            [(ngModel)]="clienteSeleccionado"
+            (onSearch)="buscarLocalSelectable($event)"
+            closeButtonText="Cancelar"
+            confirmButtonText="Seleccionar"
+            searchPlaceholder="Buscar"
+            placeholder="Seleccione un cliente">
+            <ng-template ionicSelectableSearchFailTemplate>
+              <div padding>
+                No encontrado.
+              </div>
+            </ng-template>
+          </ionic-selectable>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Planta</ion-label>
+            <ion-input type="text" placeholder="Ingresar número de planta" [(ngModel)]="alerta.planta"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Tipo de compresor</ion-label>
+            <ion-select value="brown" okText="Aceptar" cancelText="Cancelar" [(ngModel)]="alerta.equipostipo_id">
+              <ion-select-option value="1">Tornillo</ion-select-option>
+              <ion-select-option value="2">Alternativo</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item button="true">
+            <ion-label>Marca</ion-label>
+            <ionic-selectable
+            headerColor="primary"
+            [isMultiple]="false"
+            [items]="marcasCargadas"
+            itemValueField="id"
+            itemTextField="nombre"
+            [canSearch]="true"
+            closeButtonText="Cancelar"
+            confirmButtonText="Seleccionar"
+            [(ngModel)]="marcasSeleccionado"
+            (onSelect)="seleccionarMarca($event)"
+            searchPlaceholder="Buscar marca"
+            placeholder="Seleccione marca">
+            <ng-template ionicSelectableSearchFailTemplate>
+              <div padding>
+                No encontrado.
+              </div>
+            </ng-template>
+          </ionic-selectable>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Modelo</ion-label>
+            <ion-input type="text" placeholder="Ingresar descripción" [(ngModel)]="alerta.modelo_nombre"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Equipo Nro.</ion-label>
+            <ion-input type="text" placeholder="Ingresar nro de serie" [(ngModel)]="alerta.equipo_nro"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Fecha</ion-label>
+            <ion-select value="brown" okText="Aceptar" cancelText="Cancelar" (ionChange)="calcularFecha($event)">
+              <ion-select-option value="1">1 mes</ion-select-option>
+              <ion-select-option value="2">2 meses</ion-select-option>
+              <ion-select-option value="3">1 año</ion-select-option>
+              <ion-select-option value="4">2 años</ion-select-option>
+              <ion-select-option value="5">3 años</ion-select-option>
+              <ion-select-option value="6">5 años</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Descripcion</ion-label>
+            <ion-input type="text" placeholder="Ingresar descripción" [(ngModel)]="alerta.descripcion"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Estado de la alerta</ion-label>
+            <ion-select value="brown" okText="Aceptar" cancelText="Cancelar" (ionChange)="estadoAlerta($event)">
+              <ion-select-option value="1">Pendiente</ion-select-option>
+              <ion-select-option value="2">Avisado</ion-select-option>
+              <ion-select-option value="3">Programado</ion-select-option>
+              <ion-select-option value="4">Rechazado</ion-select-option>
+              <ion-select-option value="5">Realizado</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+        </ion-list>
+      </ion-card>
+    </ion-col>
+    <ion-col size="12">
+      <ion-button (click)="crearAlerta()" expand="block" shape="round" color="success">
+        Crear alerta
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

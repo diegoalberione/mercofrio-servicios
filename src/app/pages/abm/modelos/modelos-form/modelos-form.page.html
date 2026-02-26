@@ -1,0 +1,90 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/modelos-listar">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nuevo Modelo </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]='form'>
+    <ion-card class="container">
+      <ion-item-divider>
+          <h5 *ngIf="!this.dataEditar">Nuevo modelo</h5> <br/>
+          <h5 *ngIf="this.dataEditar">Datos del modelo: "{{this.dataEditar.nombre}}"</h5>
+      </ion-item-divider>
+    
+      <ion-grid>
+        <ion-row>
+            <ion-col size="12" size-lg="6">
+              <ion-list>
+                <ion-item>
+                  <ion-label position="floating">Nombre</ion-label>
+                  <ion-input formControlName="nombre"></ion-input>
+                  <div *ngFor="let error of errorMessages.nombre">
+                    <ng-container *ngIf="nombre.hasError(error.type) && (nombre.dirty || nombre.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item detail="true" button="true">
+                  <ion-label>Lineas</ion-label>
+                  <ionic-selectable 
+                  headerColor="primary"
+                  [isMultiple]="false"
+                  [items]="lineasDisponibles" 
+                  itemValueField="id" 
+                  itemTextField="nombre" 
+                  [canSearch]="true"
+                  [(ngModel)]="lineaSeleccionada"
+                  [ngModelOptions]="{standalone: true}"
+                  closeButtonText="Cancelar"
+                  confirmButtonText="Seleccionar"
+                  searchPlaceholder="Buscar" 
+                  placeholder="Seleccione una linea">
+                  <ng-template ionicSelectableSearchFailTemplate>
+                    <div padding>
+                      No encontrado.
+                    </div>
+                  </ng-template>
+                </ionic-selectable>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Tipos de equipo</ion-label>
+                  <ion-select formControlName="equipostipo_id" placeholder="Seleccion los tipos de equipo" okText="Aceptar" cancelText="Cancelar">
+                    <ion-select-option value="1">Compresor de tornillo</ion-select-option>
+                    <ion-select-option value="2">Compresor alternativo</ion-select-option>
+                    <ion-select-option value="3">Bomba de aceite</ion-select-option>
+                    <ion-select-option value="4">Bomba de amoniaco</ion-select-option>
+                  </ion-select>
+                  <div *ngFor="let error of errorMessages.equipostipo_id">
+                    <ng-container *ngIf="equipostipo_id.hasError(error.type) && (equipostipo_id.dirty || equipostipo_id.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <ion-label position="floating">Descripción</ion-label>
+                  <ion-input formControlName="descripcion"></ion-input>
+                  <div *ngFor="let error of errorMessages.descripcion">
+                    <ng-container *ngIf="descripcion.hasError(error.type) && (descripcion.dirty || descripcion.touched)">
+                      <small class="error-message">{{error.message}}</small>
+                    </ng-container>
+                  </div>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12">
+          <ion-button expand="full" shape="round" color="success" (click)="submit()">Guardar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

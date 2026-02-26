@@ -1,0 +1,240 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" (click)="volver()">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Detalle de Visita</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="visita">
+  <ion-grid class="ion-padding">
+    <!-- Información General -->
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{visita.cliente?.nombres || 'Cliente'}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label><strong>Nro. Visita:</strong></ion-label>
+                <ion-note slot="end">{{visita.id}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Fecha Visita:</strong></ion-label>
+                <ion-note slot="end">{{formatearFecha(visita.fecha)}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Localidad:</strong></ion-label>
+                <ion-note slot="end">{{getLocalidad()}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Total horas de viaje:</strong></ion-label>
+                <ion-note slot="end">{{visita.horas_viaje}} hs</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Domicilio:</strong></ion-label>
+                <ion-note slot="end">{{visita.domicilio}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Total Kilómetros:</strong></ion-label>
+                <ion-note slot="end">{{visita.km_recorridos}} km</ion-note>
+              </ion-item>
+              <ion-item *ngIf="tieneVehiculo()">
+                <ion-label><strong>Vehículo:</strong></ion-label>
+                <ion-note slot="end">
+                  {{visita.vehiculo?.nombre}} {{visita.vehiculo?.marca}} {{visita.vehiculo?.modelo}} - {{visita.vehiculo?.patente}}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Total horas trabajadas:</strong></ion-label>
+                <ion-note slot="end">{{visita.horas_trabajadas}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Responsable:</strong></ion-label>
+                <ion-note slot="end">
+                  {{visita.responsable?.nombres}} {{visita.responsable?.apellido}}
+                </ion-note>
+              </ion-item>
+              <ion-item *ngIf="tieneAcompanante()">
+                <ion-label><strong>Acompañante:</strong></ion-label>
+                <ion-note slot="end">
+                  {{visita.acompanante?.nombres}} {{visita.acompanante?.apellido}}
+                </ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Técnicos que asistieron -->
+    <ion-row *ngIf="visita.visitas_usuarios && visita.visitas_usuarios.length > 0">
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Técnicos que asistieron</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let tecnicoId of visita.visitas_usuarios">
+                <ion-label>
+                  <strong>Técnico: </strong> 
+                  <span *ngIf="getTecnicoNombre(tecnicoId)">{{getTecnicoNombre(tecnicoId)}}</span>
+                  <span *ngIf="!getTecnicoNombre(tecnicoId)" class="ion-text-muted">ID: {{tecnicoId}}</span>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Vehículos utilizados -->
+    <ion-row *ngIf="visita.visitas_vehiculos && visita.visitas_vehiculos.length > 0">
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Vehículos utilizados</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item *ngFor="let vehiculoId of visita.visitas_vehiculos">
+                <ion-label>
+                  <strong>Vehículo: </strong> 
+                  <span *ngIf="getVehiculoNombre(vehiculoId)">{{getVehiculoNombre(vehiculoId)}}</span>
+                  <span *ngIf="!getVehiculoNombre(vehiculoId)" class="ion-text-muted">ID: {{vehiculoId}}</span>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Servicios realizados -->
+    <ion-row>
+      <ion-col size="12">
+        <h2 class="ion-text-center ion-margin-top">Servicios realizados</h2>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let servicio of visita.servicios; let i = index">
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              Servicio #{{servicio.id}} - {{servicio.serviciostipo?.nombre || 'Sin tipo'}}
+              <span *ngIf="servicio.en_garantia"> (En garantía)</span>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                <ion-label><strong>Modelo:</strong></ion-label>
+                <ion-note slot="end">{{servicio.modelo_nombre}} - {{servicio.marca?.nombre}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Horas de marcha:</strong></ion-label>
+                <ion-note slot="end">{{servicio.horas_marcha}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Equipo nro:</strong></ion-label>
+                <ion-note slot="end">{{servicio.equipo_nro}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Orden de venta:</strong></ion-label>
+                <ion-note slot="end">{{servicio.orden_venta}}</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-label><strong>Nro de remito:</strong></ion-label>
+                <ion-note slot="end">{{servicio.nro_remito}}</ion-note>
+              </ion-item>
+            </ion-list>
+
+            <!-- Fotos antes del servicio -->
+            <div class="ion-margin-top">
+              <h4><strong>Fotos antes del servicio:</strong></h4>
+              <ion-grid *ngIf="servicioMultimedias[i]?.fotos_pre?.length > 0">
+                <ion-row>
+                  <ion-col size="6" *ngFor="let foto of servicioMultimedias[i].fotos_pre">
+                    <img [src]="getImagenSrc(foto)" class="foto-servicio" />
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <p *ngIf="!servicioMultimedias[i]?.fotos_pre || servicioMultimedias[i].fotos_pre.length === 0" class="ion-text-center">
+                <strong>No se cargaron fotos.</strong>
+              </p>
+            </div>
+
+            <!-- Fotos después del servicio -->
+            <div class="ion-margin-top">
+              <h4><strong>Fotos después del servicio:</strong></h4>
+              <ion-grid *ngIf="servicioMultimedias[i]?.fotos_post?.length > 0">
+                <ion-row>
+                  <ion-col size="6" *ngFor="let foto of servicioMultimedias[i].fotos_post">
+                    <img [src]="getImagenSrc(foto)" class="foto-servicio" />
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <p *ngIf="!servicioMultimedias[i]?.fotos_post || servicioMultimedias[i].fotos_post.length === 0" class="ion-text-center">
+                <strong>No se cargaron fotos.</strong>
+              </p>
+            </div>
+
+            <!-- Trabajos realizados -->
+            <div class="ion-margin-top" *ngIf="servicio.trabajos && servicio.trabajos.length > 0">
+              <h4><strong>Trabajos realizados:</strong></h4>
+              <ion-list>
+                <ion-item *ngFor="let trabajo of servicio.trabajos">
+                  <ion-label>
+                    <p>{{trabajo.observacion}}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+
+            <!-- Recomendaciones -->
+            <div class="ion-margin-top" *ngIf="servicio.descripcion && servicio.descripcion !== ''">
+              <h4><strong>Recomendaciones:</strong></h4>
+              <p>{{servicio.descripcion}}</p>
+            </div>
+
+            <!-- Repuestos utilizados -->
+            <div class="ion-margin-top">
+              <h4><strong>Repuesto utilizado:</strong></h4>
+              <ion-list *ngIf="servicio.repuestos && servicio.repuestos.length > 0">
+                <ion-item *ngFor="let repuesto of servicio.repuestos">
+                  <ion-label>
+                    <strong>{{repuesto.cantidad}}x</strong> {{repuesto.nombre}} - {{repuesto.observacion}}
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+              <p *ngIf="!servicio.repuestos || servicio.repuestos.length === 0" class="ion-text-center">
+                No se utilizaron repuestos.
+              </p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <!-- Firma -->
+    <ion-row *ngIf="visita.firma">
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Firma y aclaración del cliente</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center">
+            <img [src]="getImagenSrc(visita.firma)" class="firma-imagen" />
+            <p *ngIf="visita.firma_aclaracion">{{visita.firma_aclaracion}}</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+

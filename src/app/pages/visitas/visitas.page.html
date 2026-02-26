@@ -1,0 +1,58 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" routerLink="/home">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nueva visita</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="container">
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="11">
+        <ion-button class="ion-margin-top" expand="full" shape="round" routerLink="/form-visita">Nueva Visita</ion-button>
+      </ion-col>
+    </ion-row>
+    <!-- Listado de visitas -->
+    <ion-row class="ion-align-items-center ion-justify-content-center">
+      <ion-col size="12" class="ion-text-center">
+        <h2 class="titulo"><ion-label>Visitas</ion-label></h2> 
+        <ion-card class="ion-padding">
+          <ion-label *ngIf="visitas.length === 0">No hay visitas añadidas</ion-label>
+          <ion-list *ngIf="!!visitas.length" class="ion-margin-bottom">
+            <ion-item *ngFor="let item of visitas; let i = index">
+              <ion-label>{{item.cliente.nombres}}</ion-label> 
+              <ion-icon slot="end" name="pencil" color="primary" tappable (click)="editarVisita(item, i)"></ion-icon>
+              <ion-icon slot="end" name="trash" color="danger" tappable (click)="eliminarVisita(i, item)"></ion-icon>
+            </ion-item>
+          </ion-list>
+          <ion-button 
+            class="ion-margin-top" 
+            expand="full" 
+            shape="round" 
+            color="success" 
+            (click)="sincronizarVisitas()" 
+            [disabled]="enviandoVisitas"
+            *ngIf="visitas.length !== 0">
+            <ion-spinner *ngIf="enviandoVisitas" name="crescent" size="small"></ion-spinner>
+            <span *ngIf="!enviandoVisitas">Enviar {{visitas.length}} visita(s)</span>
+            <span *ngIf="enviandoVisitas">
+              Enviando... ({{progresoEnvio.visitaActual}}/{{progresoEnvio.totalVisitas}})
+            </span>
+          </ion-button>
+          <ion-item *ngIf="enviandoVisitas && progresoEnvio.porcentaje > 0" lines="none" class="ion-margin-top">
+            <ion-label>
+              <h3>Progreso: {{progresoEnvio.porcentaje}}%</h3>
+              <p>{{progresoEnvio.mensaje}}</p>
+            </ion-label>
+            <ion-progress-bar 
+              [value]="progresoEnvio.porcentaje / 100" 
+              color="success">
+            </ion-progress-bar>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

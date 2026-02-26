@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" (click)="editarVisita()">
+      <ion-icon color="light" slot="icon-only" name="create-outline"></ion-icon>
+      <ion-label color="light" class="ion-margin-start">Editar visita</ion-label>
+    </ion-button>
+    <ion-title>Finalizar visita</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-content class="ion-padding">
+    <div class="signature-container">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-button 
+              expand="block" 
+              color="primary" 
+              (click)="verDetalle()"
+              class="ion-margin-bottom"
+            >
+              <ion-icon name="eye-outline" slot="start"></ion-icon>
+              Ver detalle de la visita
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Firma</ion-label>
+              <signature-pad
+                color="#FFF"
+                [options]="signaturePadOptions"
+                (onBeginEvent)="drawStart()"
+                (onEndEvent)="drawComplete()"
+              ></signature-pad>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Aclaración</ion-label>
+              <ion-textarea
+                [(ngModel)]="visita.firma_aclaracion"
+              ></ion-textarea> </ion-item
+          ></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">e-mails para notificación * (separar por coma)</ion-label>
+              <ion-textarea
+                [(ngModel)]="visita.firma_emails_notificar"
+                placeholder="Ingrese al menos un correo electrónico"
+              ></ion-textarea> </ion-item
+          ></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button color="danger" (click)="clearPad()">Borrar</ion-button>
+          </ion-col>
+          <ion-col size="4" offset="2">
+            <ion-button
+              color="secondary"
+              [disabled]="(visita.firma_aclaracion=='') || !banFirmado || !visita.firma_emails_notificar || visita.firma_emails_notificar.trim()===''"
+              (click)="confirmar()"
+              >Confirmar</ion-button
+            >
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </ion-content>
+</ion-content>

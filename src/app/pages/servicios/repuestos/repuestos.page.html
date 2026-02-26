@@ -1,0 +1,80 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" (click)="atras()">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Repuestos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="container">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      <ion-col size="12">
+        <h4 class="ion-text-center titulo">
+          <ion-label>Agregar Repuestos</ion-label>
+        </h4>
+        <ion-card>
+          <ion-list>
+            <ion-item>
+              <ion-label position="floating">Código</ion-label>
+              <ion-input type="text" placeholder="Ingrese el código del repuesto" [(ngModel)]="repuesto.nombre"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Cantidad</ion-label>
+              <ion-input type="number" placeholder="Ingrese la cantidad" [(ngModel)]="repuesto.cantidad"></ion-input>
+            </ion-item>
+            
+            <ion-item>
+              <ion-label position="floating">Detalle</ion-label>
+              <ion-textarea autoGrow="true"
+                placeholder="Ingrese una descripcion"
+                [(ngModel)]="repuesto.observacion"
+              ></ion-textarea>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col size="10">
+        <ion-button
+          expand="full"
+          shape="round"
+          (click)="agregarRepuesto()"
+          color="primary"
+          [disabled]="!this.repuesto.nombre"
+          >Agregar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="repuestos.length !== 0" class="ion-justify-content-center ion-align-items-center">
+      <ion-col size="12">
+        <h6 class="ion-text-center">
+          <ion-label>Repuestos agregados</ion-label>
+        </h6>
+        <ion-card>
+          <ion-list>
+            <ion-item *ngFor="let item of repuestos; let i = index" tappable>
+              <ion-icon slot="end" name="trash" color="danger" tappable (click)="eliminarServicio(i)"></ion-icon><br/>
+              <ion-label class="ion-text-wrap">
+                <ion-text color="primary">
+                  <h3>[{{item.cantidad}}] - {{item.nombre}}</h3>
+                </ion-text>
+                <p>{{item.observacion}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>      
+      <ion-col size="10">
+        <ion-button
+          expand="full"
+          shape="round"
+          (click)="salir()"
+          color="success"
+          >Guardar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

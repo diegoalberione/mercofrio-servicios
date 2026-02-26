@@ -1,0 +1,280 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" class="ion-text-center">
+    <ion-button slot="start" class="ion-no-padding" (click)="cancelarVisita()">
+      <ion-icon color="light" slot="icon-only" name="chevron-back"></ion-icon>
+    </ion-button>
+    <ion-title>Nueva visita</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="container">
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-list>
+
+            <ion-item>
+              <ion-label position="floating">Fecha</ion-label>
+              <ion-input
+                type="date"
+                placeholder="Ingrese la fecha"
+                [(ngModel)]="this.visita.fecha"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item detail="true" button="true">
+              <ion-label>Cliente</ion-label>
+              <ionic-selectable
+                headerColor="primary"
+                [isMultiple]="false"
+                [items]="clientesDisponibles"
+                itemValueField="id"
+                itemTextField="nombres"
+                [canSearch]="true"
+                [(ngModel)]="clienteSeleccionado"
+                (onSearch)="buscarLocalSelectable($event)"
+                closeButtonText="Cancelar"
+                confirmButtonText="Seleccionar"
+                searchPlaceholder="Buscar"
+                placeholder="Seleccione un cliente"
+              >
+                <ng-template ionicSelectableSearchFailTemplate>
+                  <div padding>No encontrado.</div>
+                </ng-template>
+
+                <ng-template ionicSelectableItemTemplate let-usuario="item">
+                  <ion-label text-wrap>
+                    {{usuario.nombres}}<span *ngIf="usuario.apellido">, {{usuario.apellido}}</span>
+                  </ion-label>
+                </ng-template>
+
+                <ng-template
+                  ionicSelectableValueTemplate
+                  let-usuarioSelected="value"
+                >
+                  <div class="ionic-selectable-value-item">
+                    <span
+                      >{{clienteSeleccionado.nombres+', '+clienteSeleccionado.apellido}}</span
+                    >
+                  </div>
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+            <ion-item detail="true" button="true">
+              <ion-label>Técnico responsable</ion-label>
+              <ionic-selectable
+                headerColor="primary"
+                [isMultiple]="false"
+                [items]="tecnicosDisponibles"
+                itemValueField="id"
+                itemTextField="nombreCompleto"
+                [canSearch]="true"
+                [(ngModel)]="tecnicoSeleccionado"
+                closeButtonText="Cancelar"
+                confirmButtonText="Seleccionar"
+                searchPlaceholder="Buscar"
+                placeholder="Seleccione un técnico"
+              >
+                <ng-template ionicSelectableSearchFailTemplate>
+                  <div padding>No encontrado.</div>
+                </ng-template>
+                <ng-template ionicSelectableItemTemplate let-usuario="item">
+                  <ion-label text-wrap>
+                    {{usuario.nombres}}, {{usuario.apellido}}
+                  </ion-label>
+                </ng-template>
+                <ng-template
+                  ionicSelectableValueTemplate
+                  let-usuarioSelected="value"
+                >
+                  <div class="ionic-selectable-value-item">
+                    <span
+                      >{{tecnicoSeleccionado.nombres+'
+                      '+tecnicoSeleccionado.apellido+' '}}</span
+                    >
+                  </div>
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+            <ion-item detail="true" button="true">
+              <ion-label>Técnicos que asistieron</ion-label>
+              <ionic-selectable
+                headerColor="primary"
+                [isMultiple]="true"
+                [items]="tecnicosDisponibles"
+                itemValueField="id"
+                itemTextField="nombreCompleto"
+                [canSearch]="true"
+                [(ngModel)]="tecnicosAsistentesSeleccionados"
+                closeButtonText="Cancelar"
+                confirmButtonText="Seleccionar"
+                searchPlaceholder="Buscar"
+                placeholder="Seleccione técnicos que asistieron"
+              >
+                <ng-template ionicSelectableSearchFailTemplate>
+                  <div padding>No encontrado.</div>
+                </ng-template>
+                <ng-template ionicSelectableItemTemplate let-usuario="item">
+                  <ion-label text-wrap>
+                    {{usuario.nombres}}, {{usuario.apellido}}
+                  </ion-label>
+                </ng-template>
+                <ng-template
+                  ionicSelectableValueTemplate
+                  let-tecnicosSelected="value"
+                >
+                  <div class="ionic-selectable-value-item" *ngFor="let tecnico of tecnicosSelected; let i = index;">
+                    <span>{{tecnico.nombres}}, {{tecnico.apellido}}{{i+1===tecnicosSelected.length?'':', '}}</span>
+                  </div>
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+            <ion-item detail="true" button="true">
+              <ion-label>Vehículos</ion-label>
+              <ionic-selectable
+                headerColor="primary"
+                [isMultiple]="true"
+                [items]="vehiculosDisponibles"
+                itemValueField="id"
+                itemTextField="vehiculoDisplay"
+                [canSearch]="true"
+                [(ngModel)]="vehiculosSeleccionados"
+                closeButtonText="Cancelar"
+                confirmButtonText="Seleccionar"
+                searchPlaceholder="Buscar"
+                placeholder="Seleccione vehículos"
+              >
+                <ng-template ionicSelectableSearchFailTemplate>
+                  <div padding>No encontrado.</div>
+                </ng-template>
+                <ng-template ionicSelectableItemTemplate let-vehiculo="item">
+                  <ion-label text-wrap>
+                    {{vehiculo.nombre}} | {{vehiculo.patente}}
+                  </ion-label>
+                </ng-template>
+                <ng-template
+                  ionicSelectableValueTemplate
+                  let-vehiculosSelected="value"
+                >
+                  <div class="ionic-selectable-value-item" *ngFor="let vehiculo of vehiculosSelected; let i = index;">
+                    <span>{{vehiculo.nombre}} | {{vehiculo.patente}}{{i+1===vehiculosSelected.length?'':', '}}</span>
+                  </div>
+                </ng-template>
+              </ionic-selectable>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Localidad</ion-label>
+              <ion-input
+                placeholder="Ingrese nombre de la localidad"
+                [(ngModel)]="this.visita.localidad"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Domicilio</ion-label>
+              <ion-input
+                placeholder="Ingrese el domicilio"
+                [(ngModel)]="this.visita.domicilio"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Horas de viaje</ion-label>
+              <ion-input
+                placeholder="Ingrese las horas de viaje"
+                [(ngModel)]="this.visita.horas_viaje"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Kilómetros recorridos</ion-label>
+              <ion-input
+                placeholder="Ingrese los kilometros recorridos"
+                [(ngModel)]="this.visita.km_recorridos"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Horas trabajadas</ion-label>
+              <ion-input
+                placeholder="Ingrese las horas trabajadas"
+                [(ngModel)]="this.visita.horas_trabajadas"
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center">
+        <h2 class="titulo"><ion-label>Servicios</ion-label></h2>
+        <ion-card class="ion-padding">
+          <ion-label *ngIf="!servicios.length">Aun no hay servicios añadidos</ion-label>
+          <ion-list *ngIf="!!servicios.length">
+            <ion-item *ngFor="let item of servicios; let i = index">
+              <ion-label
+                >[{{tipoServicio(item.serviciostipo_id)}}] -
+                {{item.modelo_nombre}}</ion-label
+              >
+              <ion-icon
+                slot="end"
+                name="pencil"
+                color="primary"
+                tappable
+                (click)="modalEditarService(item, i)"
+              ></ion-icon>
+              <ion-icon
+                slot="end"
+                name="trash"
+                color="danger"
+                tappable
+                (click)="eliminarServicio(i)"
+              ></ion-icon>
+            </ion-item>
+          </ion-list>
+          <ion-button
+            size="small"
+            expand="full"
+            shape="round"
+            (click)="modalNuevoServicio()"
+            class="ion-margin-top"
+            >Añadir Servicios
+            <ion-icon slot="end" name="add" color="light"></ion-icon>
+          </ion-button>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center">
+        <ion-button
+          *ngIf="this.visita.estado_id == 0 || this.visita.id == null"
+          size="small"
+          expand="full"
+          shape="round"
+          (click)="finalizarVisita()"
+          class="ion-margin-top"
+          color="warning"
+          >Finalizar Visita<ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="8">
+        <ion-button
+          expand="full"
+          shape="round"
+          color="success"
+          (click)="guardarLocal()"
+          >Guardar visita
+          <ion-icon slot="end" name="save" color="light"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button
+          expand="full"
+          shape="round"
+          color="danger"
+          (click)="cancelarVisita()"
+          >Cancelar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
