@@ -98,6 +98,10 @@ class VisitasController extends AppController
 				$conditions['Visitas.responsable_usuario_id'] = $data['responsable_usuario_id'];
 			}
 
+			if (isset($data['zona_id'])) {
+				$conditions['Visitas.zona_id'] = $data['zona_id'];
+			}
+
 			$order = ['Visitas.id DESC'];
 			if (isset($data['sort'])) {
 				$order = $data['sort'];
@@ -1174,9 +1178,13 @@ class VisitasController extends AppController
 				} else {
 					$to = $allEmails;
 					$fecha = $date->format('d/m/Y');
-					$subject = "Visita $fecha a {$cliente['nombres']}";
+					// Visita N XXXXXXX Fecha: X/X/XXXX Cliente: XXXXXX Sucursal: XXXX (donde XXXX sea Rafaela, Bs As, Tucumán)
+
+					$subject = "Visita N° {$visita['id']} Fecha: $fecha Cliente: {$cliente['nombres']} Sucursal: {$zona['nombre']} ";
+
+
 					$contenido = "
-						Se ha realizado el día $fecha el servicio al cliente {$cliente['nombres']}
+						Se ha realizado el día $fecha el servicio N° {$visita['id']} al cliente {$cliente['nombres']}
 
 						<br>
 						<br>
@@ -1266,11 +1274,11 @@ class VisitasController extends AppController
 		$vehiculo = null;
 		if (isset($visita['vehiculo_id']) && $visita['vehiculo_id']) {
 			$vehiculoResult = $vehiculosTable->find('all', [
-			'conditions' => ['Vehiculos.id' => $visita['vehiculo_id']]
+				'conditions' => ['Vehiculos.id' => $visita['vehiculo_id']]
 			])->first();
 			if ($vehiculoResult) {
 				$vehiculo = $vehiculoResult->toArray();
-		$vehiculo = json_decode(json_encode($vehiculo), true);
+				$vehiculo = json_decode(json_encode($vehiculo), true);
 			}
 		}
 

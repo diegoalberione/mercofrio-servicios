@@ -4,6 +4,7 @@ import { IonicSelectableComponent } from 'ionic-selectable';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { VisitasService } from 'src/app/services/visitas.service';
+import { ZonasService } from 'src/app/services/zonas.service';
 
 @Component({
   selector: 'app-visitas-listar',
@@ -15,14 +16,18 @@ export class VisitasListarPage implements OnInit {
 
   clientesSubscription;
   visitas;
+  visitasCompletas;
   clientesDisponibles;
   clienteSeleccionado;
+  zonasDisponibles;
+  zonaSeleccionada;
   sinResultados = false;
   cargando = false;
 
   constructor(
     private visitasService: VisitasService,
     private clientesService: ClientesService,
+    private zonasService: ZonasService,
     private globalService: GlobalService,
     private router: Router,
     
@@ -31,6 +36,9 @@ export class VisitasListarPage implements OnInit {
   ngOnInit() {
     this.clientesSubscription = this.clientesService.listarClientesComprimido().subscribe( (data) => {
       this.clientesDisponibles = data.usuarios;
+    });
+    this.zonasService.listar().subscribe((res) => {
+      this.zonasDisponibles = res.zonas || [];
     });
     this.cargarVisitas();
   }
@@ -41,10 +49,15 @@ export class VisitasListarPage implements OnInit {
 
   cargarVisitas() {
     this.cargando = true;
-    this.visitasService.listarVisitasFiltro({banCompleto: 1, limit: 50}).subscribe( (data) => {
-      this.visitas = data.visitas;
-      this.visitas.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-      this.sinResultados = data.visitas.length === 0;
+    const params: any = { banCompleto: 1, limit: 50 };
+    if (this.zonaSeleccionada && this.zonaSeleccionada.id) {
+      params.zona_id = this.zonaSeleccionada.id;
+    }
+    this.visitasService.listarVisitasFiltro(params).subscribe( (data) => {
+      this.visitasCompletas = data.visitas || [];
+      this.visitasCompletas.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+      this.visitas = this.visitasCompletas;
+      this.sinResultados = this.visitas.length === 0;
       this.cargando = false;
     });
   }
@@ -53,14 +66,36 @@ export class VisitasListarPage implements OnInit {
     this.clienteSeleccionado = ev.value;
     this.cargando = true;
     this.visitasService.listarVisitasCompletas(this.clienteSeleccionado.id).subscribe( (data) => {
-      this.visitas = data.visitas;
-      if(data.visitas.length === 0){
-        this.sinResultados = true;
-      }else{
-        this.sinResultados = false;
-      }
+      this.visitasCompletas = data.visitas || [];
+      this.visitasCompletas.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+      this.aplicarFiltroZona();
+      this.sinResultados = this.visitas.length === 0;
       this.cargando = false;
     });
+  }
+
+  zonaChange(ev) {
+    this.zonaSeleccionada = ev.value;
+    if (this.clienteSeleccionado) {
+      this.aplicarFiltroZona();
+      this.sinResultados = this.visitas.length === 0;
+    } else {
+      this.cargarVisitas();
+    }
+  }
+
+  private aplicarFiltroZona() {
+    if (!this.visitasCompletas) {
+      this.visitas = [];
+      return;
+    }
+    if (this.zonaSeleccionada && this.zonaSeleccionada.id != null) {
+      this.visitas = this.visitasCompletas.filter(
+        (v) => v.zona_id === this.zonaSeleccionada.id
+      );
+    } else {
+      this.visitas = this.visitasCompletas;
+    }
   }
 
   goVisita(visitaId?){

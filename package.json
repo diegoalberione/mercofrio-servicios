@@ -2,7 +2,8 @@
   "name": "mercofrio",
   "version": "0.0.1",
   "scripts": {
-    "build": "ionic build && ionic cap copy && ionic cap sync && ionic cap open android"
+    "build": "ionic build && ionic cap copy && ionic cap sync && ionic cap open android",
+    "serve": "node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng run app:serve --host=localhost --port=8100"
   },
   "dependencies": {
     "@angular/animations": "11.2.14",
